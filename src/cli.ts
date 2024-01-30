@@ -25,6 +25,10 @@ const parsed = typeFlag({
     alias: 'f',
     default: false,
   },
+  'no-color': {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const allStringTranslationHashs = new Set<string>();
@@ -40,6 +44,7 @@ invariant(configDir, '--config-dir is required');
 
 const fixConfigs = parsed.flags.fix;
 const defaultLocale = parsed.flags.default;
+const noColor = parsed.flags['no-color'];
 
 for await (const entry of readdir(path.join(process.cwd(), srcDir), {
   fileFilter: ['*.ts', '*.tsx'],
@@ -141,10 +146,18 @@ for await (const entry of readdir(path.join(process.cwd(), configDir), {
             `❌ ${basename} has invalid translations: `,
             [
               missingHashs.size ?
-                `missing ${c.color('red', String(missingHashs.size))}`
+                `missing ${
+                  noColor ?
+                    missingHashs.size
+                  : c.color('red', String(missingHashs.size))
+                }`
               : '',
               extraHashs.size ?
-                `extra ${c.color('red', String(extraHashs.size))}`
+                `extra ${
+                  noColor ?
+                    extraHashs.size
+                  : c.color('red', String(extraHashs.size))
+                }`
               : '',
             ].join(', '),
           ),
