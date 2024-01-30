@@ -119,7 +119,10 @@ for await (const entry of readdir(path.join(process.cwd(), configDir), {
       ) {
         invalidPluralTranslations.push(hash);
         delete localeTranslations[hash];
-        missingHashs.add(hash);
+
+        if (fixConfigs) {
+          missingHashs.add(hash);
+        }
       }
     }
   }
@@ -129,16 +132,15 @@ for await (const entry of readdir(path.join(process.cwd(), configDir), {
     extraHashs.size > 0 ||
     invalidPluralTranslations.length > 0
   ) {
-    if (invalidPluralTranslations.length > 0) {
-      console.error(
-        `❌ ${basename} has invalid plural translations: `,
-        invalidPluralTranslations,
-      );
-      hasError = true;
-    }
-
     if (!fixConfigs) {
       hasError = true;
+
+      if (invalidPluralTranslations.length > 0) {
+        console.error(
+          `❌ ${basename} has invalid plural translations: `,
+          invalidPluralTranslations,
+        );
+      }
 
       if (missingHashs.size > 0 || extraHashs.size > 0) {
         console.error(
@@ -159,7 +161,9 @@ for await (const entry of readdir(path.join(process.cwd(), configDir), {
                   : c.color('red', String(extraHashs.size))
                 }`
               : '',
-            ].join(', '),
+            ]
+              .filter(Boolean)
+              .join(', '),
           ),
         );
       }
