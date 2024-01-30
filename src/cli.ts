@@ -1,20 +1,24 @@
+import { invariant, isObject } from '@lucasols/utils/assertions';
 import { consoleFmt as c } from '@lucasols/utils/consoleFmt';
 import { joinStrings } from '@lucasols/utils/stringUtils';
-import { assertIsNotNullish } from '@lucasols/utils/assertions';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import readdir from 'readdirp';
-import { getI18nUsagesInCode } from './findMissingTranslations.ts';
 import { typeFlag } from 'type-flag';
+import { getI18nUsagesInCode } from './findMissingTranslations.ts';
 
 const parsed = typeFlag({
   'config-dir': {
     type: String,
     alias: 'c',
   },
-  'root-dir': {
+  'src-dir': {
     type: String,
     alias: 'r',
+  },
+  default: {
+    type: String,
+    alias: 'd',
   },
   fix: {
     type: Boolean,
@@ -28,15 +32,16 @@ const allPluralTranslationHashs = new Set<string>();
 
 let hasError = false;
 
-const rootDir = parsed.flags['root-dir'];
-assertIsNotNullish(rootDir, '--root-dir is required');
+const srcDir = parsed.flags['src-dir'];
+invariant(srcDir, '--src-dir is required');
 
 const configDir = parsed.flags['config-dir'];
-assertIsNotNullish(configDir, '--config-dir is required');
+invariant(configDir, '--config-dir is required');
 
 const fixConfigs = parsed.flags.fix;
+const defaultLocale = parsed.flags.default;
 
-for await (const entry of readdir(path.join(process.cwd(), rootDir), {
+for await (const entry of readdir(path.join(process.cwd(), srcDir), {
   fileFilter: ['*.ts', '*.tsx'],
   directoryFilter: ['!node_modules', '.git'],
 })) {
@@ -59,7 +64,7 @@ if (
   allStringTranslationHashs.size === 0 &&
   allPluralTranslationHashs.size === 0
 ) {
-  console.error('❌ No translations found in dir: ', rootDir);
+  console.error('❌ No translations found in dir: ', srcDir);
   process.exit(1);
 }
 
@@ -70,17 +75,21 @@ for await (const entry of readdir(path.join(process.cwd(), configDir), {
   fileFilter: ['*.json'],
   directoryFilter: ['!node_modules', '.git'],
 })) {
+  const invalidPluralTranslations: string[] = [];
+
   const { fullPath, basename } = entry;
 
   const localeTranslations: Record<string, unknown> = JSON.parse(
     readFileSync(fullPath, 'utf-8'),
   );
 
+  const isDefaultLocale = basename === `${defaultLocale}.json`;
+
   const localeFileHashs = Object.keys(localeTranslations);
 
   const extraHashs = new Set(localeFileHashs);
   const missingHashs = new Set([
-    ...allStringTranslationHashs,
+    ...(isDefaultLocale ? [] : [...allStringTranslationHashs]),
     ...allPluralTranslationHashs,
   ]);
 
@@ -90,28 +99,110 @@ for await (const entry of readdir(path.join(process.cwd(), configDir), {
     missingHashs.delete(hash);
 
     if (allStringTranslationHashs.has(hash)) {
-      extraHashs.delete(hash);
+      const isUnnededDefaultHash =
+        isDefaultLocale && localeTranslations[hash] === null;
+
+      if (!isUnnededDefaultHash) {
+        extraHashs.delete(hash);
+      }
     } else if (allPluralTranslationHashs.has(hash)) {
       extraHashs.delete(hash);
+
+      if (
+        localeTranslations[hash] !== undefined &&
+        !isObject(localeTranslations[hash])
+      ) {
+        invalidPluralTranslations.push(hash);
+        delete localeTranslations[hash];
+        missingHashs.add(hash);
+      }
     }
   }
 
-  if (!fixConfigs) {
-    if (missingHashs.size > 0 || extraHashs.size > 0) {
+  if (
+    missingHashs.size > 0 ||
+    extraHashs.size > 0 ||
+    invalidPluralTranslations.length > 0
+  ) {
+    if (invalidPluralTranslations.length > 0) {
+      console.error(
+        `❌ ${basename} has invalid plural translations: `,
+        invalidPluralTranslations,
+      );
+      hasError = true;
+    }
+
+    if (!fixConfigs) {
       hasError = true;
 
-      console.error(
-        joinStrings(
-          `❌ ${basename} invalid translations: `,
-          !!missingHashs.size &&
-            `missing ${c.color('red', String(missingHashs.size))}`,
-          !!extraHashs.size && [
-            !!missingHashs.size && ', ',
-            `extra ${c.color('red', String(extraHashs.size))}`,
-          ],
-        ),
-      );
+      if (missingHashs.size > 0 || extraHashs.size > 0) {
+        console.error(
+          joinStrings(
+            `❌ ${basename} has invalid translations: `,
+            [
+              missingHashs.size ?
+                `missing ${c.color('red', String(missingHashs.size))}`
+              : '',
+              extraHashs.size ?
+                `extra ${c.color('red', String(extraHashs.size))}`
+              : '',
+            ].join(', '),
+          ),
+        );
+      }
+    } else {
+      if (
+        missingHashs.size === 0 &&
+        extraHashs.size === 1 &&
+        extraHashs.has(missingTranslationsKey)
+      ) {
+        console.error(`❌ ${basename} has missing translations`);
+      } else {
+        delete localeTranslations[''];
+
+        if (
+          !localeTranslations[missingTranslationsKey] &&
+          missingHashs.size > 0
+        ) {
+          localeTranslations[missingTranslationsKey] = missingTranslationValue;
+        }
+
+        if (missingHashs.size > 0) {
+          for (const hash of missingHashs) {
+            localeTranslations[hash] =
+              allPluralTranslationHashs.has(hash) ?
+                {
+                  zero: 'No x',
+                  one: '1 x',
+                  '+2': '# x',
+                  many: 'A lot of x',
+                  manyLimit: 50,
+                }
+              : null;
+          }
+        }
+
+        if (extraHashs.size > 0) {
+          for (const hash of extraHashs) {
+            if (hash === missingTranslationsKey) continue;
+
+            delete localeTranslations[hash];
+          }
+        }
+
+        localeTranslations[''] = '';
+
+        if (missingHashs.size > 0) {
+          console.info(`🟠 ${basename} translations keys were added`);
+        } else {
+          console.info(`✅ ${basename} translations fixed`);
+        }
+
+        writeFileSync(fullPath, JSON.stringify(localeTranslations, null, 2));
+      }
     }
+  } else {
+    console.info(`✅ ${basename} translations are up to date`);
   }
 }
 

@@ -1,1 +1,22 @@
-{}
+{
+  "Hello World": null,
+  "Hello {1}": null,
+  "Hello {1} {2}": null,
+  "Imported usage": null,
+  "Hello World~~2": null,
+  "# Hello World": {
+    "zero": "No x",
+    "one": "1 x",
+    "+2": "# x",
+    "many": "A lot of x",
+    "manyLimit": 50
+  },
+  "# Hello {1}": {
+    "zero": "No x",
+    "one": "1 x",
+    "+2": "# x",
+    "many": "A lot of x",
+    "manyLimit": 50
+  },
+  "": ""
+}

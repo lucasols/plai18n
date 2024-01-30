@@ -1,1 +1,22 @@
-{}
+{
+  "Hello World": "🛑 delete this line 🛑",
+  "Hello {1}": "🛑 delete this line 🛑",
+  "Hello {1} {2}": "🛑 delete this line 🛑",
+  "Hello World~~2": "🛑 delete this line 🛑",
+  "Imported usage": "🛑 delete this line 🛑",
+  "# Hello World": {
+    "zero": "No x",
+    "one": "1 x",
+    "+2": "# x",
+    "many": "A lot of x",
+    "manyLimit": 50
+  },
+  "# Hello {1}": {
+    "zero": "No x",
+    "one": "1 x",
+    "+2": "# x",
+    "many": "A lot of x",
+    "manyLimit": 50
+  },
+  "": ""
+}
