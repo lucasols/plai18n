@@ -48,7 +48,7 @@ const noColor = parsed.flags['no-color'];
 
 for await (const entry of readdir(path.join(process.cwd(), srcDir), {
   fileFilter: ['*.ts', '*.tsx'],
-  directoryFilter: ['!node_modules', '.git'],
+  directoryFilter: ['!node_modules', '!.git'],
 })) {
   const { fullPath, basename } = entry;
 
@@ -78,7 +78,7 @@ const missingTranslationValue = '🛑 delete this line 🛑';
 
 for await (const entry of readdir(path.join(process.cwd(), configDir), {
   fileFilter: ['*.json'],
-  directoryFilter: ['!node_modules', '.git'],
+  directoryFilter: ['!node_modules', '!.git'],
 })) {
   const invalidPluralTranslations: string[] = [];
 
