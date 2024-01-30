@@ -32,13 +32,13 @@ class I18n {
 
   createHashAndFallbackTranslation(
     strings: TemplateStringsArray,
-    exprs: any[],
+    exprs: (string | number)[],
   ) {
     let hash = '';
     let fallbackTranslation = '';
 
     for (let i = 0; i < strings.length; i++) {
-      const string = strings[i];
+      const string = strings[i]!;
       const expr = exprs[i];
 
       hash += string + (i !== strings.length - 1 ? `{${i + 1}}` : '');
@@ -52,7 +52,10 @@ class I18n {
     return [hash, fallbackTranslation] as const;
   }
 
-  __ = (strings: TemplateStringsArray, ...exprs: any[]): string => {
+  __ = (
+    strings: TemplateStringsArray,
+    ...exprs: (string | number)[]
+  ): string => {
     const [hash, fallbackTranslation] = this.createHashAndFallbackTranslation(
       strings,
       exprs,
@@ -103,7 +106,7 @@ class I18n {
   };
 
   __p = (num: number) => {
-    return (strings: TemplateStringsArray, ...exprs: any[]) => {
+    return (strings: TemplateStringsArray, ...exprs: (string | number)[]) => {
       const [hash, fallbackTranslation] = this.createHashAndFallbackTranslation(
         strings,
         exprs,
