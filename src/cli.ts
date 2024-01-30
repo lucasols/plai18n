@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import readdir from 'readdirp';
 import { typeFlag } from 'type-flag';
-import { getI18nUsagesInCode } from './findMissingTranslations.ts';
+import { getI18nUsagesInCode } from './findMissingTranslations.js';
 
 const parsed = typeFlag({
   'config-dir': {

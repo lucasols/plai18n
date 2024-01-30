@@ -1,4 +1,4 @@
-import { i18nitialize } from '../../src/main.ts';
+import { i18nitialize } from '../../src/main.js';
 
 const i18n = i18nitialize({
   locales: {

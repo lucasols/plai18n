@@ -1,7 +1,7 @@
 import { dedent } from '@lucasols/utils/dedent';
 import { joinStrings } from '@lucasols/utils/stringUtils';
 import { expect, test } from 'vitest';
-import { getI18nUsagesInCode } from '../src/findMissingTranslations.ts';
+import { getI18nUsagesInCode } from '../src/findMissingTranslations.js';
 
 test('find destructured usage of __', () => {
   const i18nUsages = getI18nUsagesInCode(

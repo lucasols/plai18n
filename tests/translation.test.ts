@@ -1,5 +1,5 @@
 import { test, describe, expect, beforeAll } from 'vitest';
-import { i18nitialize } from '../src/main.ts';
+import { i18nitialize } from '../src/main.js';
 
 let i18n = i18nitialize({
   locales: {
