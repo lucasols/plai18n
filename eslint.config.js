@@ -101,6 +101,7 @@ const config = [
         { ignoreOnInitialization: true, allow: ['expect'] },
       ],
       '@typescript-eslint/no-unsafe-call': ERROR_IN_CI,
+      '@typescript-eslint/method-signature-style': ERROR_IN_CI,
 
       '@typescript-eslint/no-non-null-assertion': OFF,
       '@typescript-eslint/no-empty-function': OFF,
