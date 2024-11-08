@@ -37,30 +37,30 @@
     "node": ">=21.5.0"
   },
   "devDependencies": {
-    "@ls-stack/extended-lint": "^0.2.0",
-    "@types/node": "^22.5.5",
-    "@typescript-eslint/eslint-plugin": "^8.6.0",
-    "@typescript-eslint/parser": "^8.6.0",
-    "@vitest/ui": "^2.1.1",
-    "eslint": "^9.10.0",
+    "@ls-stack/extended-lint": "^0.11.2",
+    "@types/node": "^22.9.0",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
+    "@vitest/ui": "^2.1.4",
+    "eslint": "^9.14.0",
     "@types/eslint": "^9.6.1",
     "@types/eslint__js": "^8.42.3",
-    "eslint-plugin-unicorn": "^55.0.0",
+    "eslint-plugin-unicorn": "^56.0.0",
     "eslint-plugin-vitest": "^0.5.4",
     "prettier": "3.3.3",
-    "prettier-plugin-organize-imports": "^4.0.0",
+    "prettier-plugin-organize-imports": "^4.1.0",
     "tsm": "^2.3.0",
-    "tsup": "^8.3.0",
-    "typescript": "^5.6.2",
-    "typescript-eslint": "^8.6.0",
-    "vite": "^5.4.6",
-    "vitest": "^2.1.1"
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.13.0",
+    "vite": "^5.4.10",
+    "vitest": "^2.1.4"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "readdirp": "^3.6.0",
+    "readdirp": "^4.0.2",
     "type-flag": "^3.0.0"
   }
 }
