@@ -1,5 +1,5 @@
 {
-  "name": "plai18n",
+  "name": "@ls-stack/i18n",
   "description": "Super simple i18n library",
   "version": "0.3.0",
   "license": "MIT",
@@ -37,23 +37,24 @@
     "node": ">=21.5.0"
   },
   "devDependencies": {
-    "@lucasols/eslint-plugin-extended-lint": "^1.5.0",
-    "@lucasols/utils": "^4.19.2",
-    "@types/eslint": "^8.56.2",
+    "@ls-stack/extended-lint": "^0.2.0",
+    "@types/node": "^22.5.5",
+    "@typescript-eslint/eslint-plugin": "^8.6.0",
+    "@typescript-eslint/parser": "^8.6.0",
+    "@vitest/ui": "^2.1.1",
+    "eslint": "^9.10.0",
+    "@types/eslint": "^9.6.1",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^20.11.5",
-    "@typescript-eslint/eslint-plugin": "^6.19.0",
-    "@typescript-eslint/parser": "^6.19.0",
-    "@vitest/ui": "^1.2.1",
-    "eslint": "^8.56.0",
-    "eslint-plugin-vitest": "^0.3.20",
-    "prettier": "3.2.4",
-    "prettier-plugin-organize-imports": "^3.2.4",
+    "eslint-plugin-unicorn": "^55.0.0",
+    "eslint-plugin-vitest": "^0.5.4",
+    "prettier": "3.3.3",
+    "prettier-plugin-organize-imports": "^4.0.0",
     "tsm": "^2.3.0",
-    "tsup": "^8.0.1",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.12",
-    "vitest": "^1.2.1"
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.6.0",
+    "vite": "^5.4.6",
+    "vitest": "^2.1.1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
