@@ -1,5 +1,5 @@
-import { dedent } from '@lucasols/utils/dedent';
-import { joinStrings } from '@lucasols/utils/stringUtils';
+import { dedent } from '@ls-stack/utils/dedent';
+import { joinStrings } from '@ls-stack/utils/stringUtils';
 import { expect, test } from 'vitest';
 import { getI18nUsagesInCode } from '../src/findMissingTranslations.js';
 

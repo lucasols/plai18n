@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { runCmd } from '@lucasols/utils/runShellCmd';
+import { runCmd } from '@ls-stack/utils/runShellCmd';
 import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 

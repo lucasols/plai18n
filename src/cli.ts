@@ -1,6 +1,6 @@
-import { invariant, isObject } from '@lucasols/utils/assertions';
-import { consoleFmt as c } from '@lucasols/utils/consoleFmt';
-import { joinStrings } from '@lucasols/utils/stringUtils';
+import { invariant, isObject } from '@ls-stack/utils/assertions';
+import { consoleFmt as c } from '@ls-stack/utils/consoleFmt';
+import { joinStrings } from '@ls-stack/utils/stringUtils';
 import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import readdir from 'readdirp';
