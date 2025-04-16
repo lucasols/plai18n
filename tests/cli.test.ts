@@ -344,7 +344,7 @@ test('invalid plural translations error', async () => {
       "error": true,
       "out": [
         "✅ en.json translations are up to date",
-        "❌ pt.json has invalid plural translations:  [ [32m'# Hello World'[39m ]",
+        "❌ pt.json has invalid plural translations:  [ '# Hello World' ]",
       ],
     }
   `);

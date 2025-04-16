@@ -3,7 +3,7 @@ import { consoleFmt as c } from '@ls-stack/utils/consoleFmt';
 import { joinStrings } from '@ls-stack/utils/stringUtils';
 import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
-import readdir from 'readdirp';
+import { readdirpPromise } from 'readdirp';
 import { typeFlag } from 'type-flag';
 import { getI18nUsagesInCode } from './findMissingTranslations.js';
 
@@ -46,9 +46,11 @@ const fixConfigs = parsed.flags.fix;
 const defaultLocale = parsed.flags.default;
 const noColor = parsed.flags['no-color'];
 
-for await (const entry of readdir(path.join(process.cwd(), srcDir), {
-  fileFilter: ['*.ts', '*.tsx'],
-  directoryFilter: ['!node_modules', '!.git'],
+for (const entry of await readdirpPromise(path.join(process.cwd(), srcDir), {
+  fileFilter: (entry) =>
+    entry.path.endsWith('.ts') || entry.path.endsWith('.tsx'),
+  directoryFilter: (entry) =>
+    !entry.path.includes('node_modules') && !entry.path.includes('.git'),
 })) {
   const { fullPath, basename } = entry;
 
@@ -76,9 +78,10 @@ if (
 const missingTranslationsKey = '👇 missing translations 👇';
 const missingTranslationValue = '🛑 delete this line 🛑';
 
-for await (const entry of readdir(path.join(process.cwd(), configDir), {
-  fileFilter: ['*.json'],
-  directoryFilter: ['!node_modules', '!.git'],
+for (const entry of await readdirpPromise(path.join(process.cwd(), configDir), {
+  fileFilter: (entry) => entry.path.endsWith('.json'),
+  directoryFilter: (entry) =>
+    !entry.path.includes('node_modules') && !entry.path.includes('.git'),
 })) {
   const invalidPluralTranslations: string[] = [];
 
