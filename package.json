@@ -19,7 +19,9 @@
   "files": [
     "dist"
   ],
-  "bin": "./dist/cli.js",
+  "bin": {
+    "ls-stack-i18n": "./dist/cli.js"
+  },
   "repository": "github:lucasols/utils",
   "author": "Lucas Santos",
   "type": "module",
