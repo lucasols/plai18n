@@ -1,7 +1,7 @@
 {
   "name": "@ls-stack/i18n",
   "description": "Super simple i18n library",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "license": "MIT",
   "scripts": {
     "test": "vitest --ui",
